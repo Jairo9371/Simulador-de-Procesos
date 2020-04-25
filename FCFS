@@ -1,0 +1,258 @@
+package planificacioncpu;
+import Graficos.GraficaBarras;
+import Graficos.GraficaPastel;
+import javax.swing.JOptionPane;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+
+
+public class FCFS extends javax.swing.JFrame {
+
+    /** Creates new form SJF */
+    public FCFS() {
+        initComponents();
+        lbc1.setText("");
+        lbc2.setText("");
+        lbc3.setText("");
+        lbc4.setText("");
+        
+        lbe1.setText("");
+        lbe2.setText("");
+        lbe3.setText("");
+        lbe4.setText("");
+        
+        lbesp1.setText("");
+        lbesp2.setText("");
+        lbesp3.setText("");
+        lbesp4.setText("");
+        
+        lbl1.setText("");
+        lbl2.setText("");
+        lbl3.setText("");
+        lbl4.setText("");
+        
+        lbp1.setText("");
+        lbp2.setText("");
+        lbp3.setText("");
+        lbp4.setText("");
+        
+        lbret1.setText("");
+        lbret2.setText("");
+        lbret3.setText("");
+        lbret4.setText("");
+        
+        lbres1.setText("");
+        lbres2.setText("");
+        lbres3.setText("");
+        lbres4.setText("");
+        
+        
+        
+    }
+    
+    
+    
+    
+    private void calcularActionPerformed(java.awt.event.ActionEvent evt) {                                         
+
+
+        /**
+        * Declaramos las variables
+        */
+//        Matriz Inicial
+        String [][]M=
+               {
+            {"Proceso 1","0","0"},
+            {"Proceso 2","0","0"},
+            {"Proceso 3","0","0"},
+            {"Proceso 4","0","0"}
+                };
+
+//        Vector de Ubicación de orden y posiciones
+        String [] S={"1","2","3","4"}; //numero proceso
+        String [] U={"1","2","3","4"}; //tiempo llegada
+        String [] P={"1","2","3","4"}; //tiempo cpu
+        String [] E={"Listo","Listo","Listo","Listo"};
+        
+        Integer numpro=4;
+
+        /**
+         * Leemos y Guardando los datos en la matriz
+        */
+
+        M[0][1]=txttp1.getText();
+        M[1][1]=txttp2.getText();
+        M[2][1]=txttp3.getText();
+        M[3][1]=txttp4.getText();
+
+        M[0][2]=txtcp1.getText();
+        M[1][2]=txtcp2.getText();
+        M[2][2]=txtcp3.getText();
+        M[3][2]=txtcp4.getText();
+
+        if (txttp1.getText().equals("") || txttp2.getText().equals("") || txttp3.getText().equals("") || txttp4.getText().equals("") || txtcp1.getText().equals("") || txtcp2.getText().equals("") || txtcp3.getText().equals("") || txtcp4.getText().equals("") ) {
+            
+            JOptionPane.showMessageDialog(rootPane, "Rellene todos los campos POrfavor");
+        }
+        
+        
+        else {
+                
+                        if (txttp1.getText().equals("0") || txttp2.getText().equals("0") || txttp3.getText().equals("0") || txttp4.getText().equals("0") ) {
+
+
+
+
+
+                    for (int i = 0; i < numpro; i++) {
+                    S[i]=M[i][0];
+                    U[i]=M[i][1];
+                    P[i]=M[i][2];
+
+                        }
+
+
+                /**
+                * Ordenamos los datos de la matriz segun el tiempo de llegada
+                */
+
+                    for (int i = 0 ; i < U.length - 1 ; i++) {
+                    int min = i;
+
+                        for (int j = i + 1 ; j < U.length ; j++) {
+                        if (Integer.parseInt(U[j]) < Integer.parseInt(U[min])) {
+                            min = j;    //encontramos el menor número
+
+                            }
+
+                        }
+
+
+                        if (i != min) {
+                        //permutamos los valores
+                            String aux = U[i];
+                            String aux2 = S[i];
+                            String aux3 = P[i];
+                            String aux4 = "Listo";
+
+                            U[i] = U[min];
+                            P[i] = P[min];
+                            S[i] = S[min];
+                            E[i] = "Listo";
+
+                            U[min] = aux;
+                            S[min] = aux2;
+                            P[min] = aux3;
+                            E[min] = aux4;
+                           }
+
+                      }
+
+
+                /**
+                * Mostramos los datos de los vectores segun el tiempo de llegada
+                */
+                lbp1.setText(S[0]);//ORDEN PROCESO
+                lbp2.setText(S[1]);
+                lbp3.setText(S[2]);
+                lbp4.setText(S[3]);
+
+                lbl1.setText(U[0]);//LLEGADA
+                lbl2.setText(U[1]);
+                lbl3.setText(U[2]);
+                lbl4.setText(U[3]);
+
+                lbc1.setText(P[0]);//CPU
+                lbc2.setText(P[1]);
+                lbc3.setText(P[2]);
+                lbc4.setText(P[3]);
+
+                lbe1.setText(E[0]);//ESTADO
+                lbe2.setText(E[1]);
+                lbe3.setText(E[2]);
+                lbe4.setText(E[3]);
+
+                int ttotal,tesp1,tesp2,tesp3,tesp4,tret1,tret2,tret3,tret4,tres1,tres2,tres3,tres4;
+                double tpres,tpret,tpesp;
+
+                ttotal=0;
+                for (int i = 0; i < P.length; i++) {
+                    ttotal+=Integer.parseInt(P[i]);
+
+                }
+
+                //CALCULAMOS LOS TIEMPOS PROMEDIOS
+                tret1=Integer.parseInt(P[0])-Integer.parseInt(U[0]);
+                tret2=(Integer.parseInt(P[0])+Integer.parseInt(P[1]))-Integer.parseInt(U[1]);
+                tret3=(Integer.parseInt(P[0])+Integer.parseInt(P[1])+Integer.parseInt(P[2]))-Integer.parseInt(U[2]);
+                tret4=(Integer.parseInt(P[0])+Integer.parseInt(P[1])+Integer.parseInt(P[2])+Integer.parseInt(P[3]))-Integer.parseInt(U[3]);
+                tpret=(tret1+tret2+tret3+tret4)/4;
+
+
+                tres1=Integer.parseInt(P[0])-Integer.parseInt(U[0]);
+                tres2=(Integer.parseInt(P[0])+Integer.parseInt(P[1]))-Integer.parseInt(U[1]);
+                tres3=(Integer.parseInt(P[0])+Integer.parseInt(P[1])+Integer.parseInt(P[2]))-Integer.parseInt(U[2]);
+                tres4=(Integer.parseInt(P[0])+Integer.parseInt(P[1])+Integer.parseInt(P[2])+Integer.parseInt(P[3]))-Integer.parseInt(U[3]);
+                tpres=(tres1+tres2+tres3+tres4)/4;
+
+
+                tesp1=0-Integer.parseInt(U[0]);
+                tesp2=Integer.parseInt(P[0])-Integer.parseInt(U[1]);
+                tesp3=Integer.parseInt(P[0])+Integer.parseInt(P[1])-Integer.parseInt(U[2]);
+                tesp4=Integer.parseInt(P[0])+Integer.parseInt(P[1])+Integer.parseInt(P[2])-Integer.parseInt(U[3]);
+                tpesp=(tesp1+tesp2+tesp3+tesp4)/4;
+
+
+                lbret1.setText(Integer.toString(tret1));
+                lbret2.setText(Integer.toString(tret2));
+                lbret3.setText(Integer.toString(tret3));
+                lbret4.setText(Integer.toString(tret4));
+
+                lbres1.setText(Integer.toString(tres1));
+                lbres2.setText(Integer.toString(tres2));
+                lbres3.setText(Integer.toString(tres3));
+                lbres4.setText(Integer.toString(tres4));
+
+                lbesp1.setText(Integer.toString(tesp1));
+                lbesp2.setText(Integer.toString(tesp2));
+                lbesp3.setText(Integer.toString(tesp3));
+                lbesp4.setText(Integer.toString(tesp4));
+
+
+                lbtpesp.setText(Double.toString(tpesp));
+                lbtpret.setText(Double.toString(tpret));
+                lbtpres.setText(Double.toString(tpres));
+
+
+
+
+                //Graficando
+
+                            int a1[]=new int[4];
+                            int cont=0;
+                            String a2[]=new String[4];
+                            for (int y=0;y<a1.length;y++)//llenar arreglos
+                            {
+                                cont=cont+Integer.parseInt(P[y]);
+                                a1[y]=Integer.parseInt(U[y]);
+                                a2[y]=Integer.toString(cont);
+                            }
+//                            new GraficaPastel().GraficaPastel(a1, a2, "Carlitos");
+                            
+                       GraficaBarras graficos;
+                       graficos=new GraficaBarras();
+                       graficos.graficarbarras(a1,a2,"Tiempos de CPU","Proceso","FCFS");     
+        //               
+
+
+                }else{
+
+                    JOptionPane.showMessageDialog(rootPane, "ingrese Un evento con tiempo inicial cero");
+                }
+            
+            
+        }
+        
+        
