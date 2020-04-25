@@ -1,0 +1,140 @@
+package planificacioncpu;
+
+
+
+import Graficos.GraficaBarras;
+import java.util.ArrayList;
+import Graficos.GraficaPastel;
+import javax.swing.JOptionPane;
+import java.util.List;
+
+public class Memoria extends javax.swing.JFrame {
+
+        int memoria;
+        int sistema;
+        int disponible;
+        int particiones=0;
+        int sumamu=0;
+        List<Integer[]> mapa=new ArrayList<Integer[]>(); 
+    /**
+     * Creates new form Memoria
+     */
+    public Memoria() {
+        initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setTitle("Gestor de Memoria");
+
+        
+    }
+    
+    private void cmdparticionActionPerformed(java.awt.event.ActionEvent evt) {                                             
+            
+ 
+           
+        
+        
+        int cantidad;
+        
+        cantidad=Integer.parseInt(JOptionPane.showInputDialog("Ingrese cantidad de memoria a particionar"));
+        if (disponible>=cantidad) {
+            particiones = particiones + 1;
+            this.cmdgraficar.setEnabled(true);
+                
+                Integer[]paso1={particiones,cantidad};
+                mapa.add(paso1);
+                disponible=disponible-cantidad;
+                sumamu=sumamu+cantidad;
+
+                lbldisponible.setText(Integer.toString(disponible));
+                lblocupada.setText(Integer.toString(sumamu));
+                lblnumparticiones.setText(Integer.toString(particiones));
+                
+            }else{
+
+                    JOptionPane.showMessageDialog(rootPane, "No se puede particionar esa cantidad..proceso en cola");
+                 }
+        if (disponible==0) {
+            this.cmdparticion.setEnabled(false);
+            
+        }
+        
+
+       
+        
+        
+
+
+    }  
+    
+    
+    private void cmdeliminarActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+        
+        Integer ubicacion;
+        Integer cantidad;
+        String cantidads;
+         
+        ubicacion=Integer.parseInt(JOptionPane.showInputDialog("Ingrese la partición a Eliminar"));
+        
+        for (int i = 0; i < mapa.size(); i++) {
+            if (mapa.get(i)[0].toString().equals(ubicacion.toString())) {
+            particiones = particiones -1;
+            mapa.remove(ubicacion);
+                
+                cantidads=mapa.get(ubicacion)[1].toString();;
+                cantidad=Integer.parseInt(cantidads);
+                disponible=disponible+cantidad;
+                sumamu=sumamu-cantidad;
+                
+                lbldisponible.setText(Integer.toString(disponible));
+                lblocupada.setText(Integer.toString(sumamu));
+                lblnumparticiones.setText(Integer.toString(particiones));
+        
+            
+        
+            
+        }
+        }
+        
+    } 
+    
+    private void cmdgraficarActionPerformed(java.awt.event.ActionEvent evt) {                                      
+
+                            int a1[]=new int[particiones+1];
+                            String numpart;
+                            String a2[]=new String[particiones+1];
+                            for (int y=0;y<a1.length-1;y++)//llenar arreglos
+                            {
+                                numpart=mapa.get(y)[1].toString();
+                                a1[y]=Integer.parseInt(numpart);
+                                a2[y]="Particion"+mapa.get(y)[0].toString();
+                            }
+                            a1[particiones]=disponible;
+                            a2[particiones]="Disponible";
+                            new GraficaPastel().GraficaPastel(a1, a2, "Gestion de Memoria");
+        
+
+        
+                       
+                 
+         
+      
+       
+    }                                           
+
+    private void cmdguardarActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here
+        this.cmdparticion.setEnabled(true);
+        this.cmdeliminar.setEnabled(true);
+        memoria = Integer.parseInt(txttotal.getText());
+        disponible=memoria;
+ 
+        lbldisponible.setText(Integer.toString(memoria));
+        lblocupada.setText(Integer.toString(0));
+        lblnumparticiones.setText(Integer.toString(particiones));
+
+
+
+
+    }
